@@ -16,23 +16,12 @@ Student.prototype.addMark = function(mark) {
   };
 };
 
-Student.prototype.marks = function addMarks(mark1, mark2, mark3, ...mark) {
-  this.marks.push(mark1, mark2, mark3, ...mark);
+Student.prototype.addMarks = function(...mark) {
+  this.marks.push(...mark);
 };
 
 Student.prototype.getAverage = function() {
-  let arithteticMean = 0;
-  let arr;
-  for (let value of Object.entries(this)) {
-    if (value[0] === 'marks') {
-      arr = value[1];
-    }
-  };
-  for(let i = 0; i < arr.length; i = i + 1) {
-    arithteticMean = arithteticMean + arr[i];
-  };
-  arithteticMean = arithteticMean / arr.length;
-  this.arithteticMean = arithteticMean;
+  return this.average = this.marks.reduce((summ, current) => summ + current, 0) / this.marks.length;
 };
 
 Student.prototype.exclude = function exclude(reason) {
