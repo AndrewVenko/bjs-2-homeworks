@@ -6,24 +6,24 @@ class PrintEditionItem{
         this.name = name;
         this.releaseDate = releaseDate;
         this.pagesCount = pagesCount;
-        this.state = 100;
+        this._state = 100;
         this.type = null;
     };
     // Создание методов
     fix(){
         this.state = this.state * 1.5;
     };
-    get newState(){
-        return this[state];
-    };
-    set newState(state){
-        if(this[state] < 0){
-            this[state] = 0;
-        } else if(this[state] > 100){
-            this[state] = 100;
+    set state(value){
+        if(value < 0){
+            this._state = 0;
+        } else if(value > 100){
+            this._state = 100;
         } else{
-            this[state] = this[state]
+            this._state = value;
         };
+    };
+    get state(){
+        return this._state;
     };
 };
 // Задание типов книг
@@ -67,31 +67,72 @@ class Library{
         this.books = [];
     };
     // Создание методов
-    addBook(book){
-        if(this.state > 30){
+    addBook(book, valueState){
+        valueState = book.state;
+        if(book.state > 30){
             this.books.push(book)
         };
     };
     findBookBy(type, value){
         for(let i = 0; i < this.books.length; i = i + 1){
-            let arr = [];
+            let arraysValues = [];
             for (let val of Object.entries(this.books[i])) {
-                arr.push(val[1]);
+                arraysValues.push(val[1]);
             };
-            let a = arr.some((element) => element === value);
-            if(a === true){
-                return a = this.books[i];
+            let foundBook = arraysValues.some((element) => element === value);
+            if(foundBook === true){
+                return foundBook = this.books[i];
             };
         };
         return null;
     };
     giveBookByName(bookName){
-        for(let i = 0; i < this.books.length; i += i){
+        for(let i = 0; i < this.books.length; i = i + 1){
             if(this.books[i].name === bookName) {
                 return this.books.splice(i, 1);
-            } else {
-                return null;
             };
         };
+        return null;
     };
+};
+
+// Задание №3
+class Student {
+  constructor(name){
+    this.name = name;
+    this.subject = {};
+  };
+  // Методы
+  addMark(mark, subjectName){
+    if(Number.isNaN(mark) || Object.is(mark, Infinity) || Object.is(mark, -Infinity) || Object.is(mark, 0) || Object.is(mark, -0) || Object.is(mark, String) || Object.is(mark, undefined)){
+        throw new Error('Ошибка, невалидное значение числа');
+    }else if((mark !== 1) && (mark !== 2) && (mark !== 3) && (mark !== 4) && (mark !== 5)){
+        throw new Error('Ошибка, оценка должна быть числом от 1 до 5');
+    };
+    if(this.subject[subjectName] === undefined){
+        this.subject[subjectName] = [];
+        this.subject[subjectName].push(mark);
+    } else{
+        this.subject[subjectName].push(mark);
+    };
+  };
+  getAverageBySubject(subjectName){
+    if(this.subject[subjectName] === undefined){
+        throw new Error('Ошибка, несуществующий предмет');
+    };
+    let summ = 0;
+    const arrSubject = this.subject[subjectName];
+    arrSubject.forEach((item, index, arr) => summ = summ + arr[index]);
+    return summ / arrSubject.length;
+  };
+  getAverage(){
+    const arrAverage = Object.values(this.subject).reduce((acc, value) => acc.concat(value));
+    let summ = 0;
+    arrAverage.forEach((item, index, arr) => summ = summ + arr[index]);
+    return summ / arrAverage.length;
+  };
+  exclude(reason){
+    delete this.subject;
+    this.exclude = reason;
+  };
 };
