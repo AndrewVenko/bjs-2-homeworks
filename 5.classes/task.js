@@ -1,4 +1,4 @@
-'strict mode';
+'use strict';
 // Задание №1
 class PrintEditionItem{
     // Задание конструктора

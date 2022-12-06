@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 //Задача №1
 function parseCount(value){
     const parsed = parseInt(value, 10);
