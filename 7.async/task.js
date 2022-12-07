@@ -2,56 +2,51 @@
 class AlarmClock{
     constructor(){
         this.alarmCollection = [];
-        this.timerId = undefined;
+        this.timerId = null;
     };
     // методы
     // добавление звонков
-    addClock(HHTMM, callback, id){
-        if(id === undefined){ throw new Error('Ошибка! Параметр id не передан!')};
+    addClock(hhtmm, callback, id){
+        if(id === undefined){
+            throw new Error('Ошибка! Параметр id не передан!');
+        };
         if(!this.alarmCollection.some((element) => element.id === id)){
-            try{
-                return this.alarmCollection.push({
-                    id: id,
-                    time: HHTMM,
-                    callback: callback,
-                });
-            } catch{
-                console.error('Ошибка! Звонок с таким id уже существует!');
-            };
+            return this.alarmCollection.push({
+                id: id,
+                time: hhtmm,
+                callback: callback,
+            });
+        } else{
+            console.error('Ошибка! Звонок с таким id уже существует!');
         };
     };
     // удаление звонка
     removeClock(id){
         const lengthAlarm = this.alarmCollection.length;
         this.alarmCollection = this.alarmCollection.filter(element => element.id !== id);
-        if(lengthAlarm !== this.alarmCollection.length){
-            return true;
-        } else{
-            return false;
-        };
+        return (lengthAlarm !== this.alarmCollection.length);
     };
     // возвращает текущее время
     getCurrentFormattedTime(){
-        let currentDate = new Date().toLocaleTimeString().slice(0,-3);;
-        return currentDate;
+        return new Date().toLocaleTimeString().slice(0,-3);
     };
     // запускает все звонки
     start(){
-        let time = this.getCurrentFormattedTime();
-        function checkClock(clock){
-            if(clock.HHTMM === time){
-                clock.callback();
-            };
-        };
-        if(this.timerId === undefined){
-            this.timerId = setInterval(this.alarmCollection.some((element) => checkClock(element)), 1000);
+        let currentTime = this.getCurrentFormattedTime();
+        if(this.timerId !== null){
+        } else{
+            this.timerId = setInterval(() => {this.alarmCollection.forEach(function checkClock(clock, index, arr) {
+                if(clock.time === currentTime){
+                    clock.callback('Пора вставать!');
+                };
+            })}, 1000);
         };
     };
     // остановить выполнение звонков
     stop(){
         if(this.timerId !== undefined){
-            clearInterval();
-            this.timerId = undefined;
+            clearInterval(this.timerId);
+            this.timerId = null;
         };
     };
     // печатает все звонки
@@ -62,7 +57,7 @@ class AlarmClock{
     };
     // удаляет все звонки
     clearAlarms(){
-        stop();
+        this.stop();
         this.alarmCollection = [];
     };
 };
