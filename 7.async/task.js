@@ -32,14 +32,15 @@ class AlarmClock{
     };
     // запускает все звонки
     start(){
-        let currentTime = this.getCurrentFormattedTime();
-        if(this.timerId !== null){
-        } else{
-            this.timerId = setInterval(() => {this.alarmCollection.forEach(function checkClock(clock, index, arr) {
-                if(clock.time === currentTime){
-                    clock.callback('Пора вставать!');
-                };
-            })}, 1000);
+        let time = this.getCurrentFormattedTime();
+        function checkClock(clock){
+            if(clock.time === time){
+                clock.callback();
+            };
+        };
+        let newCheckClock = checkClock.bind(this);
+        if(this.timerId === null){
+            this.timerId = setInterval(() => {this.alarmCollection.forEach( (clock) => newCheckClock(clock))}, 1000);
         };
     };
     // остановить выполнение звонков
