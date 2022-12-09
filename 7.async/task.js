@@ -32,9 +32,10 @@ class AlarmClock{
     };
     // запускает все звонки
     start(){
-        let time = this.getCurrentFormattedTime();
         function checkClock(clock){
-            if(clock.time === time){
+            let time = getCurrentFormattedTime();
+            let bindTime = time.bind(this);
+            if(clock.time === bindTime()){
                 clock.callback();
             };
         };
