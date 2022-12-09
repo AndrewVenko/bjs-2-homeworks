@@ -33,15 +33,13 @@ class AlarmClock{
     // запускает все звонки
     start(){
         function checkClock(clock){
-            let time = getCurrentFormattedTime();
-            let bindTime = time.bind(this);
-            if(clock.time === bindTime()){
+            if(clock.time === this.getCurrentFormattedTime()){
                 clock.callback();
             };
         };
         let newCheckClock = checkClock.bind(this);
         if(this.timerId === null){
-            this.timerId = setInterval(() => {this.alarmCollection.forEach( (clock) => newCheckClock(clock))}, 1000);
+            this.timerId = setInterval(() => {this.alarmCollection.forEach(clock => newCheckClock(clock))}, 1000);
         };
     };
     // остановить выполнение звонков
