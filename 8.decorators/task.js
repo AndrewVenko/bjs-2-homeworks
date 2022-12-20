@@ -20,16 +20,21 @@ function cachingDecoratorNew(func) {
 };
 
 function debounceDecoratorNew(func, time) {
+  let timeoutId = null; // 
   function wrapper(){
     wrapper.count = wrapper.count + 1;
-    return wrapper.count,  wrapper.allCount;
+    return function(){
+      if(timeoutId){
+        clearTimeout(timeoutId);
+      };
+      let differentDelay = time - delay;
+      timeoutId = setTimeout(() => {
+        wrapper.allCount = wrapper.allCount + 1;
+        func(signalOrder, delay);
+      }, differentDelay);
+    };
   };
-  wrapper;
-  return function(){
-    let differenceDelay = time - delay;
-    timeoutId = setTimeout(() => {
-      func(signalOrder, delay);
-      wrapper.allCount = wrapper.allCount + 1;
-    }, differenceDelay);
-  };
+  wrapper.count = 0;
+  wrapper.allCount = 0;
+  return wrapper;
 };
